@@ -8,15 +8,14 @@
         body {
             font-family: 'Times New Roman', serif;
             text-align: center;
-            background-color: #f5f5dc;
+            background-color: #f5f5dc; /* Бежевый фон */
             margin: 0;
             padding: 0;
-            color: #5a4a3a;
-            touch-action: manipulation;
+            color: #5a4a3a; /* Тёмно-бежевый текст */
         }
         header {
             background-color: white;
-            color: #a67c52;
+            color: #a67c52; /* Светло-коричневый */
             padding: 25px;
             font-size: 28px;
             font-weight: bold;
@@ -37,7 +36,7 @@
             font-size: 16px;
             width: 80%;
             margin: 15px 0;
-            border: 2px solid #e0c9a6;
+            border: 2px solid #e0c9a6; /* Светло-бежевая рамка */
             border-radius: 8px;
             font-family: 'Times New Roman', serif;
         }
@@ -69,18 +68,11 @@
             max-width: 100%;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(166, 124, 82, 0.2);
-            cursor: pointer;
         }
         .music-note {
             font-size: 20px;
             margin-top: 10px;
             color: #a67c52;
-        }
-        .music-control {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
         }
     </style>
 </head>
@@ -97,59 +89,32 @@
     
     <div class="container hidden" id="resultContainer">
         <div class="result">Молодец! Открывай дверь ❤️</div>
-        <div class="music-note">♫ Нажми на гифку, чтобы включить музыку ♫</div>
-        <img src="https://opis-cdn.tinkoffjournal.ru/mercury/17-cats-mem.zlgxt6gqj3pj..gif" 
-             alt="Поздравление" 
-             class="gif"
-             id="musicTrigger">
-        <div class="music-control hidden" id="musicControls">
-            <button onclick="document.getElementById('weddingMusic').play()">▶️ Включить</button>
-            <button onclick="document.getElementById('weddingMusic').pause()">⏸️ Пауза</button>
-        </div>
+        <img src="https://opis-cdn.tinkoffjournal.ru/mercury/17-cats-mem.zlgxt6gqj3pj..gif" alt="Поздравление" class="gif">
         <audio id="weddingMusic" loop>
-            <!-- Используем прокси для обхода CORS -->
-            <source src="https://cors-anywhere.herokuapp.com/https://cloud.mail.ru/public/LoMf/T4h5MZ1ZS" type="audio/mpeg">
-            Ваш браузер не поддерживает аудио элемент.
+            <source src="https://cloud.mail.ru/public/LoMf/T4h5MZ1ZS" type="audio/mpeg">
         </audio>
     </div>
 
     <script>
-        // Предварительная загрузка музыки
-        const audio = new Audio();
-        audio.src = "https://cors-anywhere.herokuapp.com/https://cloud.mail.ru/public/LoMf/T4h5MZ1ZS";
-        
         function checkBrideName() {
             const inputName = document.getElementById('brideName').value.trim();
             const correctName = "Анастасия Назарова";
+            const errorElement = document.getElementById('error');
             
             if (inputName.toLowerCase() === correctName.toLowerCase()) {
+                // Правильный ответ - показываем результат
                 document.getElementById('taskContainer').classList.add('hidden');
                 document.getElementById('resultContainer').classList.remove('hidden');
-                document.getElementById('musicControls').classList.remove('hidden');
                 
-                const musicTrigger = document.getElementById('musicTrigger');
-                musicTrigger.onclick = function() {
-                    const weddingMusic = document.getElementById('weddingMusic');
-                    weddingMusic.currentTime = 12;
-                    weddingMusic.play()
-                        .then(() => {
-                            document.querySelector('.music-note').textContent = "♫ Играет свадебная мелодия ♫";
-                        })
-                        .catch(e => {
-                            document.querySelector('.music-note').textContent = "♫ Нажми 'Разрешить', чтобы включить музыку ♫";
-                            console.error("Ошибка воспроизведения:", e);
-                        });
-                };
+                // Запускаем музыку с 12 секунды
+                const audio = document.getElementById('weddingMusic');
+                audio.currentTime = 12;
+                audio.play().catch(e => console.log("Автовоспроизведение заблокировано: ", e));
             } else {
-                document.getElementById('error').textContent = "Попробуй ещё раз!";
+                // Неправильный ответ
+                errorElement.textContent = "Попробуй ещё раз!";
             }
         }
-        
-        // Инициализация аудио при загрузке страницы
-        window.addEventListener('DOMContentLoaded', () => {
-            // Предзагрузка музыки
-            audio.load();
-        });
     </script>
 </body>
 </html>
