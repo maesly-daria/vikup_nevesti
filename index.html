@@ -8,14 +8,14 @@
         body {
             font-family: 'Times New Roman', serif;
             text-align: center;
-            background-color: #f5f5dc; /* Бежевый фон */
+            background-color: #f5f5dc;
             margin: 0;
             padding: 0;
-            color: #5a4a3a; /* Тёмно-бежевый текст */
+            color: #5a4a3a;
         }
         header {
             background-color: white;
-            color: #a67c52; /* Светло-коричневый */
+            color: #a67c52;
             padding: 25px;
             font-size: 28px;
             font-weight: bold;
@@ -36,7 +36,7 @@
             font-size: 16px;
             width: 80%;
             margin: 15px 0;
-            border: 2px solid #e0c9a6; /* Светло-бежевая рамка */
+            border: 2px solid #e0c9a6;
             border-radius: 8px;
             font-family: 'Times New Roman', serif;
         }
@@ -74,6 +74,9 @@
             margin-top: 10px;
             color: #a67c52;
         }
+        #playMusicBtn {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -90,6 +93,7 @@
     <div class="container hidden" id="resultContainer">
         <div class="result">Молодец! Открывай дверь ❤️</div>
         <img src="https://opis-cdn.tinkoffjournal.ru/mercury/17-cats-mem.zlgxt6gqj3pj..gif" alt="Поздравление" class="gif">
+        <button id="playMusicBtn" onclick="playWeddingMusic()">🎵 Включить музыку 🎵</button>
         <audio id="weddingMusic" loop>
             <source src="https://cloud.mail.ru/public/LoMf/T4h5MZ1ZS" type="audio/mpeg">
         </audio>
@@ -102,29 +106,35 @@
             const errorElement = document.getElementById('error');
             
             if (inputName.toLowerCase() === correctName.toLowerCase()) {
-                // Правильный ответ - показываем результат
                 document.getElementById('taskContainer').classList.add('hidden');
                 document.getElementById('resultContainer').classList.remove('hidden');
-                
-                // Сохраняем в localStorage факт успешного ответа
+                // Сохраняем в localStorage, что выкуп пройден
                 localStorage.setItem('brideRansomPassed', 'true');
-                
-                // Запускаем музыку с 12 секунды
-                playWeddingMusic();
             } else {
-                // Неправильный ответ
                 errorElement.textContent = "Попробуй ещё раз!";
             }
         }
-        
+
         function playWeddingMusic() {
             const audio = document.getElementById('weddingMusic');
             audio.currentTime = 12;
-            // Добавляем взаимодействие пользователя для разблокировки аудио
-            document.body.addEventListener('click', function() {
-                audio.play().catch(e => console.log("Ошибка воспроизведения: ", e));
-            }, { once: true });
+            audio.play()
+                .then(() => {
+                    document.getElementById('playMusicBtn').textContent = "🎶 Музыка играет 🎶";
+                })
+                .catch(error => {
+                    alert("Не удалось запустить музыку. Разрешите автовоспроизведение в браузере.");
+                    console.error("Ошибка воспроизведения:", error);
+                });
         }
+
+        // Если страница перезагружена и выкуп уже пройден, показываем результат
+        window.onload = function() {
+            if (localStorage.getItem('brideRansomPassed') === 'true') {
+                document.getElementById('taskContainer').classList.add('hidden');
+                document.getElementById('resultContainer').classList.remove('hidden');
+            }
+        };
     </script>
 </body>
 </html>
