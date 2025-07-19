@@ -106,14 +106,24 @@
                 document.getElementById('taskContainer').classList.add('hidden');
                 document.getElementById('resultContainer').classList.remove('hidden');
                 
+                // Сохраняем в localStorage факт успешного ответа
+                localStorage.setItem('brideRansomPassed', 'true');
+                
                 // Запускаем музыку с 12 секунды
-                const audio = document.getElementById('weddingMusic');
-                audio.currentTime = 12;
-                audio.play().catch(e => console.log("Автовоспроизведение заблокировано: ", e));
+                playWeddingMusic();
             } else {
                 // Неправильный ответ
                 errorElement.textContent = "Попробуй ещё раз!";
             }
+        }
+        
+        function playWeddingMusic() {
+            const audio = document.getElementById('weddingMusic');
+            audio.currentTime = 12;
+            // Добавляем взаимодействие пользователя для разблокировки аудио
+            document.body.addEventListener('click', function() {
+                audio.play().catch(e => console.log("Ошибка воспроизведения: ", e));
+            }, { once: true });
         }
     </script>
 </body>
