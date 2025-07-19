@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выкуп невесты</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            background-color: #f5f5dc;
+            margin: 0;
+            padding: 0;
+            color: #5a4a3a;
+            touch-action: manipulation;
+        }
+        header {
+            background-color: white;
+            color: #a67c52;
+            padding: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(166, 124, 82, 0.1);
+            letter-spacing: 2px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(166, 124, 82, 0.1);
+        }
+        input {
+            padding: 12px;
+            font-size: 16px;
+            width: 80%;
+            margin: 15px 0;
+            border: 2px solid #e0c9a6;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+        }
+        button {
+            background-color: #a67c52;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Times New Roman', serif;
+        }
+        button:hover {
+            background-color: #8c6b4a;
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #a67c52;
+        }
+        .hidden {
+            display: none;
+        }
+        .gif {
+            margin-top: 25px;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(166, 124, 82, 0.2);
+            cursor: pointer;
+        }
+        .music-note {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #a67c52;
+        }
+        .music-control {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>ВЫКУП НЕВЕСТЫ</header>
+    
+    <div class="container" id="taskContainer">
+        <h2>Испытание для жениха:</h2>
+        <p>Напиши имя и фамилию своей будущей жены</p>
+        <input type="text" id="brideName" placeholder="Введите имя и фамилию">
+        <button onclick="checkBrideName()">Проверить</button>
+        <p id="error" style="color: #d4a373;"></p>
+    </div>
+    
+    <div class="container hidden" id="resultContainer">
+        <div class="result">Молодец! Открывай дверь ❤️</div>
+        <div class="music-note">♫ Нажми на гифку, чтобы включить музыку ♫</div>
+        <img src="https://opis-cdn.tinkoffjournal.ru/mercury/17-cats-mem.zlgxt6gqj3pj..gif" 
+             alt="Поздравление" 
+             class="gif"
+             id="musicTrigger">
+        <div class="music-control hidden" id="musicControls">
+            <button onclick="document.getElementById('weddingMusic').play()">▶️ Включить</button>
+            <button onclick="document.getElementById('weddingMusic').pause()">⏸️ Пауза</button>
+        </div>
+        <audio id="weddingMusic" loop>
+            <!-- Используем прокси для обхода CORS -->
+            <source src="https://cors-anywhere.herokuapp.com/https://cloud.mail.ru/public/LoMf/T4h5MZ1ZS" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио элемент.
+        </audio>
+    </div>
+
+    <script>
+        // Предварительная загрузка музыки
+        const audio = new Audio();
+        audio.src = "https://cors-anywhere.herokuapp.com/https://cloud.mail.ru/public/LoMf/T4h5MZ1ZS";
+        
+        function checkBrideName() {
+            const inputName = document.getElementById('brideName').value.trim();
+            const correctName = "Анастасия Назарова";
+            
+            if (inputName.toLowerCase() === correctName.toLowerCase()) {
+                document.getElementById('taskContainer').classList.add('hidden');
+                document.getElementById('resultContainer').classList.remove('hidden');
+                document.getElementById('musicControls').classList.remove('hidden');
+                
+                const musicTrigger = document.getElementById('musicTrigger');
+                musicTrigger.onclick = function() {
+                    const weddingMusic = document.getElementById('weddingMusic');
+                    weddingMusic.currentTime = 12;
+                    weddingMusic.play()
+                        .then(() => {
+                            document.querySelector('.music-note').textContent = "♫ Играет свадебная мелодия ♫";
+                        })
+                        .catch(e => {
+                            document.querySelector('.music-note').textContent = "♫ Нажми 'Разрешить', чтобы включить музыку ♫";
+                            console.error("Ошибка воспроизведения:", e);
+                        });
+                };
+            } else {
+                document.getElementById('error').textContent = "Попробуй ещё раз!";
+            }
+        }
+        
+        // Инициализация аудио при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            // Предзагрузка музыки
+            audio.load();
+        });
+    </script>
+</body>
+</html>
